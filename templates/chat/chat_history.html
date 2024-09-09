@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini Chat</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <style>
+        .chat-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .message-container {
+            display: flex;
+            flex-direction: column-reverse;
+            height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+        .message {
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .user-message {
+            background-color: #f1f1f1;
+            border: 1px solid #ddd;
+        }
+        .bot-message {
+            background-color: #e1ffe1;
+            border: 1px solid #c1ffc1;
+        }
+        .form-container {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container chat-container">
+        <h1 class="text-center mb-4">Gemini Chat</h1>
+        
+        <div class="message-container" id="message-container">
+            {% for message in messages %}
+                <div class="message bot-message">
+                    <strong>Bot:</strong> {{ message.bot_response }}
+                </div>
+                <div class="message user-message">
+                    <strong>User:</strong> {{ message.user_message }}
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="form-container">
+            <h2>Send a Message</h2>
+            <form 
+                action="{% url 'send_message' %}" 
+                method="post"
+            >
+                {% csrf_token %}
+                <div class="form-group">
+                    <textarea class="form-control" name="user_message" rows="4" placeholder="Type your message here..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Send</button>
+            </form>
+
+            <form 
+                action="{% url 'delete_chat_history' %}" 
+                method="post"
+                style="margin-top: 20px;"
+            >
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Delete Chat History</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
